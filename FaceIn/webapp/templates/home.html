@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row row-cols-5 flex-grow-1">
+    <!-- First Card -->
+    
+    {% for branch in branches %}
+                <div class="p-2 d-flex">
+                    <div class="card bg-light-subtle shadow border-1 border-dark-subtle" style="flex: 1; aspect-ratio: 1 / 1;">
+                        <div class="card-body d-flex flex-column">
+                            <h3 class="card-title">{{ branch.branch_name }}</h3>
+                            <hr>
+                            <div class="d-flex flex-column flex-grow-1 justify-content-between">
+                                <p>Address: {{ branch.branch_address }}</p>
+                                <p>IP Address: {{ branch.branch_ip }}</p>
+                                <a href="{% url 'branch_detail' branch.branch_id %}" class="btn btn-primary align-self-end">View Info</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    {% endfor %}
+
+    <!-- Second Card -->
+    <div class="p-2 d-flex">
+        <div class="card bg-light-subtle shadow border-1 border-dark-subtle d-falex justify-content-center" style="flex: 1; aspect-ratio: 1 / 1;">
+            <button type="button" class="btn btn-outline-primary flex-grow-1" style="font-size: large;">ADD BRANCH</button>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

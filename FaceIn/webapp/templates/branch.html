@@ -1,0 +1,193 @@
+{% extends "base.html" %} 
+{% block content %}
+<div class="container mt-2 row row-cols-2 column">
+    <div class=" col-3">
+        <div class="p-4 border border-1 border-dark-subtle bg-body-secondary rounded d-flex flex-column">
+            <h3 class="mb-4">Branch Information</h3>
+            <div class="flex-grow-1 mb-4">
+                <ul class="list-group  border border-1 border-dark-subtle">
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">Branch: </div>
+                        {{ branch.branch_name }}
+                    </div>
+
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">Address: </div>
+                        {{ branch.branch_address }}
+                    </div>
+
+                    </li>
+
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                        <div class="fw-bold">IP Address: </div>
+                        {{ branch.branch_ip }}
+                        </div>
+    
+                    </li>
+                </ul>
+                <br>
+                <div class="d-flex justify-content-end">
+                    <button type="button" class="btn btn-outline-primary">Edit Branch Information</button>
+                </div>
+                
+            </div>
+            
+        </div>
+    </div>
+
+    <div class=" col-9">
+        <div class="d-flex flex-column flex-grow-1"> 
+                <div class="col d-flex gap-1 flex-column gap-2">
+
+                        {% for day, shifts in ordered_shifts.items %}
+                            <div class="d-flex flex-grow-1 gap-2">
+
+                            <div class="border bg-body-secondary border-1 border-dark-subtle p-3 d-flex rounded justify-content-center align-items-center">
+                                <p class="mb-0">{{ day }}</p>
+                            </div>
+
+                            <div class="d-flex flex-column gap-2 flex-grow-1">
+                                {% for shift in shifts %}
+                                    <div class="d-flex gap-2 flex-grow-1">
+                                <div class="p-3 border bg-body-secondary border-1 border-dark-subtle rounded d-flex flex-column justify-content-center text-center" style="font-size: 12px;">
+                                    <div>{{ shift.shift_start|date:"g:i a" }}</div>
+                                    <div>to</div>
+                                    <div>{{ shift.shift_end|date:"g:i a" }}</div>
+                                </div>
+                                <div class="flex-grow-1 d-flex flex-column gap-2 ">
+                                {% if shift.shift_employees.exists %}
+                                    {% for employee in shift.shift_employees.all %}
+                                    <div class="d-flex gap-2 flex-grow-1 ">
+                                        <div class=" bg-body-secondary border border-1 border-dark-subtle rounded card-size d-flex p-3 flex-column flex-grow-1" >
+                                            <div class="text-start d-flex align-content-center flex-grow-1">
+                                                <p style="font-size: 12px;" class="mb-0">{{ employee.emp_name }}</p>
+                                            </div>
+                                        
+                                        </div>
+                                        <div class="d-flex flex-column justify-content-center align-content-center">
+                                            <a href="{% url 'remove_shift' employee.emp_id shift.shift_id %}" class="btn btn-outline-danger mb-0 flex-grow-1">
+                                                Remove
+                                            </a>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="d-flex flex-grow-1 bg-body-secondary">
+                                        <div class="border border-1 border-dark-subtle rounded card-size p-2 justify-content-center align-content-center flex-grow-1">
+                                            <div style="font-size: 12px;">No employee assigned</div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                <div class="d-flex">
+                                    <div class="d-flex card-size flex-grow-1">
+                                        <button type="button" class="btn btn-outline-primary w-100 h-100" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
+                                            Add
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                </div>
+                                <div class="d-flex">
+                                    <!-- Delete Shift Button -->
+                                    <button type="button" class="btn btn-outline-danger flex-grow-1" data-bs-toggle="modal" data-bs-target="#deleteShiftModal{{ shift.shift_id }}">
+                                        Delete shift
+                                    </button>
+                                </div>
+                                
+                                <!-- Confirmation Modal -->
+                                <div class="modal fade" id="deleteShiftModal{{ shift.shift_id }}" tabindex="-1" aria-labelledby="deleteShiftLabel{{ shift.shift_id }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="deleteShiftLabel{{ shift.shift_id }}">Confirm Delete</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure you want to delete this shift ({{ shift.shift_start|date:"g:i a" }} - {{ shift.shift_end|date:"g:i a" }})?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <a href="{% url 'delete_shift' shift.shift_id %}" class="btn btn-danger">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                </div>
+                                
+                                {% endfor %}
+                            </div>
+                                
+                            </div>
+                        
+                        {% endfor %} 
+                        <div class="d-flex">
+                            <button type="button" class="btn btn-outline-success flex-grow-1" data-bs-toggle="modal" data-bs-target="#addShiftModal">Add shift</button>
+                        </div>
+                        
+                        <!-- Add Shift Modal -->
+                        <div class="modal fade" id="addShiftModal" tabindex="-1" aria-labelledby="addShiftModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="addShiftModalLabel">Add Shift</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form method="POST" action="{% url 'add_shift' %}" class="modal-body">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="branch_id" value="{{ branch.branch_id }}">
+                                    
+                                        <!-- Dropdown for selecting a day -->
+                                        <div class="mb-3">
+                                            <label for="shiftDay" class="form-label">Select Day</label>
+                                            <select id="shiftDay" name="shift_day" class="form-select" required>
+                                                <option value="">-- Select Day --</option>
+                                                <option value="Monday">Monday</option>
+                                                <option value="Tuesday">Tuesday</option>
+                                                <option value="Wednesday">Wednesday</option>
+                                                <option value="Thursday">Thursday</option>
+                                                <option value="Friday">Friday</option>
+                                                <option value="Saturday">Saturday</option>
+                                                <option value="Sunday">Sunday</option>
+                                            </select>
+                                        </div>
+                                    
+                                        <!-- Time inputs for shift start and end -->
+                                        <div class="mb-3">
+                                            <label for="shiftStart" class="form-label">Shift Start</label>
+                                            <input type="time" class="form-control" id="shiftStart" name="shift_start" required>
+                                        </div>
+                                    
+                                        <div class="mb-3">
+                                            <label for="shiftEnd" class="form-label">Shift End</label>
+                                            <input type="time" class="form-control" id="shiftEnd" name="shift_end" required>
+                                        </div>
+                                    
+                                        <button type="submit" class="btn btn-primary">Add Shift</button>
+                                    </form>
+                                    
+                                    
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if messages %}
+                            <div>
+                                {% for message in messages %}
+                                    <div class="alert alert-{{ message.tags }}" role="alert">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                </div>
+        </div>
+    </div>
+</div> 
+{% endblock %}
