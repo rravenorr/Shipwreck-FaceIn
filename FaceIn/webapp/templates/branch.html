@@ -84,10 +84,49 @@
                                 {% endif %}
                                 <div class="d-flex">
                                     <div class="d-flex card-size flex-grow-1">
-                                        <button type="button" class="btn btn-outline-primary w-100 h-100" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
-                                            Add
+                                        <!-- Add Employee to Shift Button -->
+                                        <button type="button" class="btn btn-outline-primary w-100 h-100" data-bs-toggle="modal" data-bs-target="#addEmployeeModal{{ shift.shift_id }}">
+                                            Add employee to shift
                                         </button>
                                     </div>
+                                    
+                                    <!-- Modal to List Employees -->
+                                    <div class="modal fade" id="addEmployeeModal{{ shift.shift_id }}" tabindex="-1" aria-labelledby="addEmployeeLabel{{ shift.shift_id }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="addEmployeeLabel{{ shift.shift_id }}">Add Employee to Shift</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form method="POST" action="{% url 'add_employee_to_shift' %}">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="shift_id" value="{{ shift.shift_id }}">
+                                    
+                                                        <!-- List Employees -->
+                                                        <div class="mb-3">
+                                                            <label for="employee" class="form-label">Select Employee</label>
+                                                            <select id="employee" name="employee_id" class="form-select" required>
+                                                                <option value="">-- Select Employee --</option>
+                                                                {% for employee in branch.employees.all %}
+                                                                    {% if employee not in shift.shift_employees.all %}
+                                                                        <option value="{{ employee.emp_id }}">{{ employee.emp_name }}</option>
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                            <button type="submit" class="btn btn-primary">Add Employee</button>
+                                                        </div>
+                                                    </form>
+
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                                 
                                 </div>

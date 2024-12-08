@@ -80,4 +80,23 @@ def delete_shift(request, shift_id):
     except Exception as e:
         messages.error(request, f"An error occurred while deleting the shift: {e}")
         return redirect('home')
+    
+def add_employee_to_shift(request):
+    print("adding employee to shift")
+    if request.method == 'POST':
+        shift_id = request.POST.get('shift_id')
+        employee_id = request.POST.get('employee_id')
+
+        try:
+            shift = get_object_or_404(Shift, shift_id=shift_id)
+            employee = get_object_or_404(Employee, emp_id=employee_id)
+
+            # Add employee to the shift
+            shift.shift_employees.add(employee)
+            messages.success(request, f'{employee.emp_name} has been added to the shift.')
+
+        except Exception as e:
+            messages.error(request, f"An error occurred: {e}")
+
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
