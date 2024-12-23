@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div class="container p-5">
+
+        <div class="d-flex row p-2 bg-body-secondary border shadow-sm border-1 mb-2 border-dark-subtle rounded-2">
+            <div class="p-3 d-flex col col-10 align-items-center"> 
+                <h4 class="mb-0">Add Employee</h4>
+            </div>
+            <div class="p-3 d-flex col col-2 align-items-center justify-content-end"> 
+            
+
+            </div>
+        </div>
+        <div class="d-flex row p-2 bg-body-secondary border shadow-sm border-1 mb-2 border-dark-subtle rounded-2">
+            <form method="post" action="{% url 'register_employee' %}">
+                {% csrf_token %}
+                <div class="d-flex gap-2">
+                    <div class="d-flex flex-column flex-grow-1">
+                        <h4>Personal Information</h4>
+                        <label for="first_name" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="first_name" name="first_name" required>
+                        <label for="last_name" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="last_name" name="last_name" required>
+                        <label for="middle_name" class="form-label">Middle Name</label>
+                        <input type="text" class="form-control" id="middle_name" name="middle_name" required>
+                        
+                        <label for="sex" class="form-label">Sex</label>
+                        <select name="sex" id="sex" class="form-select">
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Prefer not to say">Prefer not to say</option>
+                        </select>
+                        <label for="contact" class="form-label">Contact Number</label>
+                        <input type="text" class="form-control" id="contact" name="contact" required>
+                    </div>
+            
+                    <div class="d-flex flex-column flex-grow-1">
+                        <h4>Employee Details</h4>
+                        <label for="comp_id" class="form-label">Company ID</label>
+                        <input type="text" class="form-control" id="comp_id" name="comp_id" required>
+                        <label for="department" class="form-label">Department</label>
+                        <select name="department" id="department" class="form-select">
+                            {% for department in departments %}
+                                <option value="{{ department.department_id }}">{{ department.department_name }}</option>
+                            {% endfor %}
+                        </select>
+                        <label for="role" class="form-label">Role</label>
+                        <select name="role" id="role" class="form-select">
+                            <option value="Regular Employee">Regular Employee</option>
+                            <option value="Department Head">Department Head</option>
+                        </select>
+                        <label for="date_hires" class="form-label">Date Hired</label>
+                        <input type="date" class="form-control" id="date_hires" name="date_hires" required>
+                        <label for="leave_credits" class="form-label">Leave Credits</label>
+                        <input type="number" class="form-control" id="leave_credits" name="leave_credits" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">Save</button>
+            </form>
+            
+    </div>
+    </div>
+
+
+
+{% endblock %}

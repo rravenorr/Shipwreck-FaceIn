@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div class="container p-5">
+
+        <div class="d-flex row p-2 bg-body-secondary border shadow-sm border-1 mb-2 border-dark-subtle rounded-2">
+            <div class="p-3 d-flex col col-10 align-items-center"> 
+                <h4 class="mb-0">Employee List</h4>
+            </div>
+            <div class="p-3 d-flex col col-2 align-items-center justify-content-end"> 
+                
+            </div>
+        </div>
+
+        <div class="d-flex row bg-body-secondary border shadow-sm border-1 mb-2 border-dark-subtle rounded-2">
+            <div class="p-3 d-flex col col-1 align-items-center justify-content-center "> 
+                <p class="mb-0">#</p>
+            </div>
+
+            <div class="p-3 d-flex col col-3 align-items-center"> 
+                <p class="mb-0">Employee Name</p>
+            </div>
+
+            <div class="p-3 d-flex col col-2 align-items-center"> 
+                <p class="mb-0">Department</p>
+            </div>
+
+            <div class="p-3 d-flex col col-2 align-items-center"> 
+                <p class="mb-0">Contact No.</p>
+            </div>
+
+            <div class="p-3 d-flex col col-3 align-items-center "> 
+                <p class="mb-0">Leave Credits</p>
+            </div>
+            
+            <div class="p-3 d-flex col col-1 align-items-center justify-content-center"> 
+                
+            </div>
+
+        </div>
+
+        <div class="d-flex flex-column gap-2">
+            {% for employee in employees %}
+                
+                <div class="d-flex border border-1 shadow-sm border-dark-subtle rounded-2 row">
+                    <div class="p-3 d-flex col col-1 align-items-center justify-content-center"> 
+                        <p class="mb-0">{{ forloop.counter }}</p>
+                    </div>
+
+                    <div class="p-3 d-flex col col-3 align-items-center"> 
+                        <p class="mb-0">{{ employee.emp_Fname }} {{ employee.emp_Lname }}</p>
+                        
+                    </div>
+
+                    <div class="p-3 d-flex col col-2 align-items-center"> 
+                        <p class="mb-0">{{ employee.emp_department }}</p>
+                    </div>
+
+                    <div class="p-3 d-flex col col-2 align-items-center"> 
+                        <p class="mb-0">{{ employee.emp_contact_no }}</p>
+                    </div>
+
+                    <div class="p-3 d-flex col col-3 align-items-center"> 
+                        <p class="mb-0">{{ employee.emp_leave_credits }}</p>
+                    </div>
+
+                    <div class="p-3 d-flex col col-1 align-items-center justify-content-center"> 
+                        <a class="mb-0 btn btn-primary ">Edit</a>                        
+                    </div>
+
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+
+{% endblock %}
